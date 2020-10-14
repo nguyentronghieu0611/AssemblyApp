@@ -2,6 +2,7 @@ package com.example.assemblyapp.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -10,9 +11,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,12 +112,42 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if(itemId == R.id.btnAddCommand){
-            getSupportActionBar().setTitle("Thêm lệnh");
-            FragmentTransaction t = fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            t.add(R.id.fragmentError, new CommandFragment(null, db), "TAG");
-            t.addToBackStack(null);
-            t.commit();
+        switch (itemId){
+            case R.id.btnAddCommand:
+                getSupportActionBar().setTitle("Thêm lệnh");
+                FragmentTransaction t = fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                t.add(R.id.fragmentError, new CommandFragment(null, db), "TAG");
+                t.addToBackStack(null);
+                t.commit();
+                break;
+            case R.id.btnUpdateInfo:
+                startActivity(new Intent(CommandActivity.this,UserInfoActivity.class));
+                break;
+            case R.id.btnChangePass:
+                startActivity(new Intent(CommandActivity.this,ChangePasswordActivity.class));
+                break;
+            case R.id.btnLogOut:
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                startActivity(new Intent(CommandActivity.this, LoginActivity.class));
+                                SharedPreferences settings = getSharedPreferences("my_pref", Context.MODE_PRIVATE);
+                                settings.edit().clear().commit();
+                                finish();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AlertDialogTheme);
+                builder.setMessage("Bạn có muốn đăng xuất?").setPositiveButton("Có", dialogClickListener)
+                        .setNegativeButton("Không", dialogClickListener).show();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

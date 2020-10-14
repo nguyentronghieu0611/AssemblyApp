@@ -109,6 +109,13 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
         return sqLiteDatabase.update("tblUser",values,"id = ?",new String[]{String.valueOf(user.getId())});
     }
 
+    public int changePassword(User user){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("password", user.getPassword());
+        return sqLiteDatabase.update("tblUser",values,"id = ?",new String[]{String.valueOf(user.getId())});
+    }
+
     public int updateUserFull(User user){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
