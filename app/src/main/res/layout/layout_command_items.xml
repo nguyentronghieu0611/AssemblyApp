@@ -22,7 +22,7 @@
             android:visibility="gone"
             android:text="No Image"
             android:textColor="#FFFFFF"
-            android:textSize="30dp"
+            android:textSize="10dp"
             android:textStyle="bold" />
 
 

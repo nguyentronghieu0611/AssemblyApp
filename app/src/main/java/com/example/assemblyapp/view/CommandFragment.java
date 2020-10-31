@@ -121,7 +121,7 @@ public class CommandFragment extends Fragment {
         edtDescription = view.findViewById(R.id.edtDescription);
         btnSave = view.findViewById(R.id.btnSave);
         if(command ==null)
-            actionBar.setTitle("Thêm lỗi");
+            actionBar.setTitle("Thêm lệnh");
         else{
             actionBar.setTitle("Chi tiết");
             edtName.setText(command.getName());

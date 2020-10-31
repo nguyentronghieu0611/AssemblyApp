@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -102,10 +103,31 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        if(typeMenu==1)
+        if(typeMenu==1){
             menuInflater.inflate(R.menu.menu,menu);
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+            SearchView searchView =
+                    (SearchView) searchItem.getActionView();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.d("query",query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Log.d("newText",newText);
+                    listCommand = db.searchCommand(newText.toUpperCase());
+                    lvError.setAdapter(new CommandAdapter(listCommand,CommandActivity.this,fragmentManager,db));
+                    return false;
+                }
+            });
+        }
         else if(typeMenu==2)
-            menuInflater.inflate(R.menu.menu_error,menu);
+            menuInflater.inflate(R.menu.menu_command,menu);
+        else
+            menuInflater.inflate(R.menu.menu_add_command,menu);
         return true;
     }
 
@@ -119,6 +141,8 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
                 t.add(R.id.fragmentError, new CommandFragment(null, db), "TAG");
                 t.addToBackStack(null);
                 t.commit();
+                typeMenu=3;
+                invalidateOptionsMenu();
                 break;
             case R.id.btnUpdateInfo:
                 startActivity(new Intent(CommandActivity.this,UserInfoActivity.class));

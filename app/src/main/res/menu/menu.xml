@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
     android:id="@+id/btnAddCommand"
     android:title="Thêm lệnh mói"/>
@@ -12,6 +13,11 @@
     <item
         android:id="@+id/btnLogOut"
         android:title="Đăng xuất"/>
+    <item android:id="@+id/action_search"
+        android:title="Tìm kiếm"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
 <!--    <item-->
 <!--        android:id="@+id/btnListMark"-->
 <!--        android:title="Danh sách đánh dấu"/>-->

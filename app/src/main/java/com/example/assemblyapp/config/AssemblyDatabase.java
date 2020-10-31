@@ -147,6 +147,24 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
         return result;
     }
 
+    public List<Command> searchCommand(String searchStr){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor c = sqLiteDatabase.rawQuery("Select * from tblCommand where upper(name) like '%"+searchStr+"%'", null);
+        List<Command> result = new ArrayList<>();
+        Command command;
+        if(c.moveToFirst()){
+            do{
+                int id = c.getInt(0);
+                String name = c.getString(1);
+                String description = c.getString(2);
+                byte[] image = c.getBlob(3);
+                command = new Command(id,name,description,image);
+                result.add(command);
+            }while (c.moveToNext());
+        }
+        return result;
+    }
+
     public long insertCommand(Command command){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
