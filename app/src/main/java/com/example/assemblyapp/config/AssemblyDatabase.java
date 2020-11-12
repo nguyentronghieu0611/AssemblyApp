@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.assemblyapp.model.AmercementLevel;
 import com.example.assemblyapp.model.MarkUser;
+import com.example.assemblyapp.model.SearchHistory;
 import com.example.assemblyapp.model.User;
 import com.example.assemblyapp.model.Command;
 
@@ -61,7 +62,14 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
                 "id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name" + " TEXT NOT NULL, " +
                 "email" + " TEXT UNIQUE NOT NULL, " +
+                "role" + " INTEGER, " +
                 "password" + " TEXT NOT NULL )");
+
+        //tao bang lich su tim kiem
+        db.execSQL(" CREATE TABLE " + "tblSearchHistory" + " (" +
+                "id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_id" + " INTEGER, " +
+                "search_text" + " TEXT NOT NULL )");
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
@@ -72,7 +80,19 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+
+
     //thao tac voi user
+
+    public boolean checkHasAdmin(){
+        boolean hasAdmin = false;
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        Cursor c = sqLiteDatabase.rawQuery("Select email from tblUser where email=?", new String[]{"admin1234@abc.com"});
+        if(c.moveToFirst())
+            hasAdmin=true;
+        return hasAdmin;
+    }
+
     public long insertUser(User user){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -125,7 +145,30 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
         return sqLiteDatabase.update("tblUser",values,"id = ?",new String[]{String.valueOf(user.getId())});
     }
 
+    public List<SearchHistory> getHistory(int user_id1){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor c = sqLiteDatabase.rawQuery("Select * from tblSearchHistory where user_id=? order by id desc limit 5", new String[]{String.valueOf(user_id1)});
+        List<SearchHistory> result = new ArrayList<>();
+        SearchHistory searchHistory;
+        if(c.moveToFirst()){
+            do{
+                int id = c.getInt(0);
+                int user_id = c.getInt(1);
+                String content = c.getString(2);
+                searchHistory = new SearchHistory(id,user_id,content);
+                result.add(searchHistory);
+            }while (c.moveToNext());
+        }
+        return result;
+    }
 
+    public Long insertHistory(SearchHistory searchHistory){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("user_id", searchHistory.getUser_id());
+        values.put("search_text", searchHistory.getSearch_txt());
+        return sqLiteDatabase.insert("tblSearchHistory", null, values);
+    }
 
 
     //thao tac voi bang loi

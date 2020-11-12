@@ -6,4 +6,5 @@
     <color name="white">#FFFFFF</color>
     <color name="signupColor">#066e8a</color>
     <color name="transparent">#80FFFFFF</color>
+    <color name="hint">#AEAEAE</color>
 </resources>

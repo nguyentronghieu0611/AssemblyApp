@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (isNameValid && isEmailValid && isPasswordValid) {
-            long a = db.insertUser(new User(email.getText().toString(),name.getText().toString(),password.getText().toString()));
+            long a = db.insertUser(new User(email.getText().toString(),name.getText().toString(),password.getText().toString(),1));
             if(a>0)
                 Utils.showSnackbar("Đăng ký thành công",layout);
             else

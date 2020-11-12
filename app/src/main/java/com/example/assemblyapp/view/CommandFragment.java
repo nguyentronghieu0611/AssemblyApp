@@ -49,10 +49,12 @@ public class CommandFragment extends Fragment {
     AssemblyDatabase db;
     public static final int PICK_IMAGE = 1997;
     DataChange dataChange;
+    int role=0;
 
-    public CommandFragment(Command command, AssemblyDatabase db){
+    public CommandFragment(Command command, AssemblyDatabase db, int role){
         this.command = command;
         this.db = db;
+        this.role = role;
     }
 
 

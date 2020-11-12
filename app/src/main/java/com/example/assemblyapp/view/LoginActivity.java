@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        initAdminAccount();
     }
 
     public void SetValidation() {
@@ -96,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putInt("user_id",lsRs.get(0).getId());
                 editor.putString("email",lsRs.get(0).getEmail());
                 editor.putString("name",lsRs.get(0).getName());
+                editor.putInt("role",lsRs.get(0).getRole());
                 editor.commit();
                 startActivity(new Intent(LoginActivity.this, CommandActivity.class));
                 finish();
@@ -104,6 +106,15 @@ public class LoginActivity extends AppCompatActivity {
                 Utils.showSnackbar("Đăng nhập thất bại",layout);
         }
 
+    }
+
+    private void initAdminAccount(){
+        if(!db.checkHasAdmin()){
+            Utils.showSnackbar("Chưa có admin",layout);
+            db.insertUser(new User("admin1234@abc.com","admin","admin1234",0));
+        }
+        else
+            Utils.showSnackbar("Đã có admin",layout);
     }
 
 }
