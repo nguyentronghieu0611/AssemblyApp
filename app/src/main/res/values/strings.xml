@@ -17,4 +17,5 @@
     <string name="save">LƯU</string>
     <string name="please_grant_read">Vui lòng cấp quyền đọc bộ nhớ</string>
     <string name="please_grant_write">Vui lòng cấp quyền ghi bộ nhớ</string>
+    <string name="hintSearchMess">Tìm kiếm...</string>
 </resources>

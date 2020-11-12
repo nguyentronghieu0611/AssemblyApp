@@ -12,6 +12,7 @@
         android:title="Đăng xuất"/>
     <item android:id="@+id/action_search"
         android:title="Tìm kiếm"
+        android:tooltipText="Tìm kiếm..."
         android:icon="@drawable/ic_baseline_search_24"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />

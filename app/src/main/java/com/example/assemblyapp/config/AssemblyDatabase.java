@@ -99,6 +99,7 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
         values.put("email", user.getEmail());
         values.put("password", user.getPassword());
         values.put("name", user.getName());
+        values.put("role", user.getRole());
         return sqLiteDatabase.insert("tblUser", null, values);
     }
 
@@ -113,8 +114,9 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
                 int id = c.getInt(0);
                 String name = c.getString(1);
                 String email1 = c.getString(2);
-                String pass = c.getString(3);
-                user = new User(id,email1,name,pass);
+                int role = c.getInt(3);
+                String pass = c.getString(4);
+                user = new User(id,email1,name,pass,role);
                 result.add(user);
             }while (c.moveToNext());
         }
@@ -188,6 +190,17 @@ public class AssemblyDatabase extends SQLiteOpenHelper {
             }while (c.moveToNext());
         }
         return result;
+    }
+
+    public boolean countCommand(){
+        boolean hasData = false;
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor c = sqLiteDatabase.rawQuery("Select * from tblCommand", null);
+        int count=0;
+        if(c.moveToFirst()){
+            hasData = true;
+        }
+        return hasData;
     }
 
     public List<Command> searchCommand(String searchStr){

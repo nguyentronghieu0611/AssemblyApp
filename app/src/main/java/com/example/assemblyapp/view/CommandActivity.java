@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,6 +71,7 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
 
     private void initControl(){
         getSupportActionBar().setTitle("Danh sách lệnh");
+        layoutHistory = findViewById(R.id.layout_search);
         layout = findViewById(R.id.layout_main);
         preferences = getSharedPreferences(Utils.MY_REF,MODE_PRIVATE);
         role = preferences.getInt("role",0);
@@ -78,6 +80,7 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
         lvError = findViewById(R.id.listview);
         lvSearchHistory = findViewById(R.id.listviewHistory);
         db = new AssemblyDatabase(this);
+        insertDemoData();
         listCommand = db.getCommand();
         lvError.setAdapter(new CommandAdapter(listCommand,this,fragmentManager,db));
         int permissionCheckWrite = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -138,6 +141,7 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView =
                 (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(Html.fromHtml("<font color = #AEAEAE>" + getResources().getString(R.string.hintSearchMess) + "</font>"));
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(
@@ -153,6 +157,7 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                initStateSearch(true);
                 return true;
             }
 
@@ -163,6 +168,13 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
                 lvError.setAdapter(new CommandAdapter(listCommand,CommandActivity.this,fragmentManager,db));
                 initStateSearch(false);
                 return true;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                initStateSearch(false);
+                return false;
             }
         });
         searchView.setSubmitButtonEnabled(true);
@@ -179,7 +191,7 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
 
             @Override
             public boolean onQueryTextChange(final String newText) {
-                if(newText.isEmpty())
+                if(!newText.isEmpty())
                     initStateSearch(true);
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
@@ -282,4 +294,14 @@ public class CommandActivity extends AppCompatActivity implements DataChange {
         invalidateOptionsMenu();
         Objects.requireNonNull(getSupportActionBar()).setTitle("Danh sách lệnh");
     }
+
+    private void insertDemoData(){
+        if(!db.countCommand()){
+            db.insertCommand(new Command("Lệnh điều kiện IF - ELSE","Lệnh điều kiện",null));
+            db.insertCommand(new Command("Lệnh lặp for","Lệnh lặp for",null));
+            db.insertCommand(new Command("Lệnh lặp while do","Lệnh lặp while do",null));
+        }
+    }
+
+
 }

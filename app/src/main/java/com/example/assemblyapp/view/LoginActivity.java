@@ -110,11 +110,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initAdminAccount(){
         if(!db.checkHasAdmin()){
-            Utils.showSnackbar("Chưa có admin",layout);
             db.insertUser(new User("admin1234@abc.com","admin","admin1234",0));
         }
-        else
-            Utils.showSnackbar("Đã có admin",layout);
     }
 
 }
