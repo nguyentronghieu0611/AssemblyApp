@@ -122,6 +122,8 @@ public class CommandFragment extends Fragment {
         edtName = view.findViewById(R.id.edtName);
         edtDescription = view.findViewById(R.id.edtDescription);
         btnSave = view.findViewById(R.id.btnSave);
+        if(role==1)
+            btnSave.setVisibility(View.GONE);
         if(command ==null)
             actionBar.setTitle("Thêm lệnh");
         else{
